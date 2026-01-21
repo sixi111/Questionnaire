@@ -112,6 +112,8 @@ const backBtn = document.getElementById("backBtn");
 const nextBtn = document.getElementById("nextBtn");
 const downloadBtn = document.getElementById("downloadBtn");
 const counter = document.getElementById("counter");
+const groupPrompt = document.getElementById("groupPrompt");
+const groupPromptImg = document.getElementById("groupPromptImg");
 const videoGrid = document.getElementById("videoGrid");
 const sortArea = document.getElementById("sortArea");
 const errorBox = document.getElementById("errorBox");
@@ -166,6 +168,7 @@ function renderPage() {
   const saved = ratings[idx];
   currentOrders = buildInitialOrders(saved?.orders, groupVideos);
   renderSortLists(groupVideos);
+  renderGroupPrompt(groupVideos);
 
   backBtn.style.visibility = idx === 0 ? "hidden" : "visible";
   nextBtn.textContent = idx === N - 1 ? "提交并完成" : "下一组";
@@ -300,6 +303,16 @@ function buildInitialOrders(savedOrders, groupVideos) {
     }
   });
   return result;
+}
+
+function renderGroupPrompt(groupVideos) {
+  const withPrompt = groupVideos.find((v) => v.promptImg);
+  if (withPrompt) {
+    groupPrompt.style.display = "block";
+    groupPromptImg.src = withPrompt.promptImg;
+  } else {
+    groupPrompt.style.display = "none";
+  }
 }
 
 // ====== 收集当前页数据；未完成返回 false ======
