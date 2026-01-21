@@ -90,6 +90,7 @@ const CRITERIA = [
   { key: "semanticAdherence", label: "语义贴合度 (Semantic Adherence)" },
   { key: "physicalCommonsense", label: "物理常识性 (Physical Commonsense)" },
   { key: "videoQuality", label: "视频质量 (Video Quality)" },
+  { key: "userPreference", label: "综合偏好 (User Preference)" },
 ];
 
 const GROUP_SIZE = 8;
@@ -258,6 +259,7 @@ function shortName(key) {
   if (key === "semanticAdherence") return "SA_rank";
   if (key === "physicalCommonsense") return "PC_rank";
   if (key === "videoQuality") return "VQ_rank";
+  if (key === "userPreference") return "UP_rank";
   return key;
 }
 
@@ -290,7 +292,7 @@ function collectCurrentPage() {
 
 // ====== 导出 CSV ======
 function downloadCSV() {
-  const header = ["group_index", "label", "model_name", "video_id", "SA_rank", "PC_rank", "VQ_rank"];
+  const header = ["group_index", "label", "model_name", "video_id", "SA_rank", "PC_rank", "VQ_rank", "UP_rank"];
   const lines = [header.join(",")];
   ratings.forEach((r, gIdx) => {
     const start = gIdx * GROUP_SIZE;
@@ -315,6 +317,7 @@ function downloadCSV() {
         ranks["SA_rank"] ?? "",
         ranks["PC_rank"] ?? "",
         ranks["VQ_rank"] ?? "",
+        ranks["UP_rank"] ?? "",
       ];
       lines.push(row.join(","));
     });
