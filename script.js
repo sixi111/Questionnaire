@@ -157,20 +157,14 @@ function renderPage() {
   done.style.display = "none";
   page.style.display = "block";
 
-  const start = idx * GROUP_SIZE;
-  const groupVideos = videoList.slice(start, start + GROUP_SIZE);
+  const groupVideos = getGroupVideos(idx);
   const N = GROUP_COUNT;
   counter.textContent = `第 ${idx + 1} / ${N} 组`;
 
   renderVideoGrid(groupVideos);
 
   const saved = ratings[idx];
-  currentOrders = saved?.orders ? structuredClone(saved.orders) : {};
-  CRITERIA.forEach((c) => {
-    if (!currentOrders[c.key]) {
-      currentOrders[c.key] = groupVideos.map((_, i) => i);
-    }
-  });
+  currentOrders = buildInitialOrders(saved?.orders, groupVideos);
   renderSortLists(groupVideos);
 
   backBtn.style.visibility = idx === 0 ? "hidden" : "visible";
@@ -246,8 +240,7 @@ function moveItem(key, from, delta) {
   const to = from + delta;
   if (to < 0 || to >= order.length) return;
   [order[from], order[to]] = [order[to], order[from]];
-  const start = idx * GROUP_SIZE;
-  const groupVideos = videoList.slice(start, start + GROUP_SIZE);
+  const groupVideos = getGroupVideos(idx);
   renderSortLists(groupVideos);
 }
 
@@ -276,10 +269,42 @@ function fileNameFromId(videoId) {
   return parts[parts.length - 1];
 }
 
+function reorderGroup(videos) {
+  const arr = [...videos];
+  const idxTest = arr.findIndex((v) => v.id && v.id.startsWith("test_demo/"));
+  if (idxTest > 0) {
+    const [item] = arr.splice(idxTest, 1);
+    arr.unshift(item);
+  }
+  return arr;
+}
+
+function getGroupVideos(groupIdx) {
+  const start = groupIdx * GROUP_SIZE;
+  const group = videoList.slice(start, start + GROUP_SIZE);
+  return reorderGroup(group);
+}
+
+function buildInitialOrders(savedOrders, groupVideos) {
+  const result = {};
+  CRITERIA.forEach((c) => {
+    const saved = Array.isArray(savedOrders?.[c.key]) ? savedOrders[c.key] : null;
+    if (saved && saved.length === groupVideos.length) {
+      const mapped = saved.map((id, i) => {
+        const idx = groupVideos.findIndex((v) => v.id === id);
+        return idx === -1 ? i : idx;
+      });
+      result[c.key] = mapped;
+    } else {
+      result[c.key] = groupVideos.map((_, i) => i);
+    }
+  });
+  return result;
+}
+
 // ====== 收集当前页数据；未完成返回 false ======
 function collectCurrentPage() {
-  const start = idx * GROUP_SIZE;
-  const groupVideos = videoList.slice(start, start + GROUP_SIZE);
+  const groupVideos = getGroupVideos(idx);
   const current = { orders: {} };
   for (const c of CRITERIA) {
     const orderIdxs = currentOrders[c.key];
@@ -295,8 +320,7 @@ function downloadCSV() {
   const header = ["group_index", "label", "model_name", "video_id", "SA_rank", "PC_rank", "VQ_rank", "UP_rank"];
   const lines = [header.join(",")];
   ratings.forEach((r, gIdx) => {
-    const start = gIdx * GROUP_SIZE;
-    const groupVideos = videoList.slice(start, start + GROUP_SIZE);
+    const groupVideos = getGroupVideos(gIdx);
     const ranksByCriterion = {};
     CRITERIA.forEach((c) => {
       const order = r.orders?.[c.key] || [];
