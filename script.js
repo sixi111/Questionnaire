@@ -96,6 +96,16 @@ const CRITERIA = [
 const GROUP_SIZE = 8;
 const GROUP_COUNT = Math.ceil(videoList.length / GROUP_SIZE);
 const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const MODEL_PRIORITY = [
+  "test_demo",
+  "kling_demo",
+  "veo_3_1_demo",
+  "sora_2_pro_demo",
+  "wan_14b_demo",
+  "physctrl_demo",
+  "wan_5b_demo",
+  "cogvideo_5b_demo",
+];
 
 // ====== 状态 ======
 let idx = 0; // 当前组索引
@@ -261,8 +271,7 @@ function shortName(key) {
 
 function modelNameFromId(videoId) {
   if (!videoId) return "";
-  const parts = videoId.split("/");
-  const name = parts.length > 1 ? parts[0] : videoId;
+  const name = rawModelFromId(videoId);
   return name.endsWith("_demo") ? name.slice(0, -5) : name;
 }
 
@@ -272,14 +281,20 @@ function fileNameFromId(videoId) {
   return parts[parts.length - 1];
 }
 
+function rawModelFromId(videoId) {
+  if (!videoId) return "";
+  const parts = videoId.split("/");
+  return parts.length > 1 ? parts[0] : videoId;
+}
+
 function reorderGroup(videos) {
   const arr = [...videos];
-  const idxTest = arr.findIndex((v) => v.id && v.id.startsWith("test_demo/"));
-  if (idxTest > 0) {
-    const [item] = arr.splice(idxTest, 1);
-    arr.unshift(item);
-  }
-  return arr;
+  const priority = (v) => {
+    const model = rawModelFromId(v.id);
+    const idx = MODEL_PRIORITY.indexOf(model);
+    return idx === -1 ? MODEL_PRIORITY.length + arr.indexOf(v) : idx;
+  };
+  return arr.sort((a, b) => priority(a) - priority(b));
 }
 
 function getGroupVideos(groupIdx) {
