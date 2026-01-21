@@ -1,0 +1,1 @@
+The toy frog is subjected to an upward and forward force, and eventually lands on the ground. The camera perspective remains fixed, with no noticeable camera movement, and the background also remains unchanged.

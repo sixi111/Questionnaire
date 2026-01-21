@@ -1,0 +1,1 @@
+The toy drone initially remained stationary at the center of the helipad, then steadily ascended vertically while rotating, and finally landed smoothly due to gravity. There was no noticeable camera movement, and the background remained unchanged.

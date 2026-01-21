@@ -1,0 +1,4 @@
+**3D 一致性评分：8.5 / 10（较高）**  
+序列中房间（窗户、墙面、地板透视、炉灶、椅子与地面碎片分布）整体保持稳定；泰迪熊在空间中的上升/悬浮/下落与地面投影（阴影位置与软硬变化）大体匹配，尺度与透视也基本一致。轻微扣分点在于：熊的悬浮阶段偶有“漂浮感”强于真实受力的细节（如接地/离地过渡与阴影形变略不完全物理一致），以及个别帧中肢体姿态的微小形变连续性略弱。
+
+"The teddy bear was smoothly lifted up into the air, hovered for a moment, and then gradually tipped backward and fell onto the wooden floor, as if an invisible upward force is suspending it before gravity pulls it down and makes it roll onto its back. The viewpoint was fixed and centered with no noticeable camera motion, and the background remains unchanged."

@@ -1,0 +1,1 @@
+The football initially rests motionless on the grass, then is steadily lifted upwards while simultaneously rotating downwards. It briefly hovers above the ground before gradually descending and finally landing back on the grass. The camera perspective remains fixed, with no camera movement, and the background also remains unchanged.

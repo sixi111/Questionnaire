@@ -1,0 +1,1 @@
+The wooden toy house remains stationary, while the observation point continuously moves in a circular motion to the left around the house, accelerating instantaneously until it has rotated 45 degrees around the wooden toy house.

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>单视频逐页主观评分问卷</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- 封面页 -->
+    <div id="cover" class="card">
+      <h1>主观评分问卷</h1>
+      <p>本问卷用于对4D生成视频进行三项主观评估：语义贴合度、物理常识性、视频质量。每项采用 1-5 分李克特量表（1=差，5=优秀）。</p>
+      <p class="muted">提示：视频应从输入图像开始，静态或近乎静态的序列不受偏好。</p>
+
+      <h3>评分准则</h3>
+      <div class="criteria">
+        <strong>🧠 语义贴合度（Semantic Adherence）</strong>
+        <table>
+          <tr><th>分数</th><th>评分标准</th></tr>
+          <tr><td>1</td><td>与提示严重不符，动作/位置与描述相反或缺失。</td></tr>
+          <tr><td>2</td><td>多数内容偏离提示，仅有少量相关元素。</td></tr>
+          <tr><td>3</td><td>大致匹配提示，细节或力的方向/位置存在明显偏差。</td></tr>
+          <tr><td>4</td><td>整体符合提示，力的方向和位置基本到位。</td></tr>
+          <tr><td>5</td><td>完全贴合提示，内容与运动精准对齐输入描述和力的方向/位置。</td></tr>
+        </table>
+
+        <strong>🧭 物理常识性（Physical Commonsense）</strong>
+        <table>
+          <tr><th>分数</th><th>评分标准</th></tr>
+          <tr><td>1</td><td>运动明显违背物理直觉，轨迹/速度不合理。</td></tr>
+          <tr><td>2</td><td>多数动作不符合受力后的常识性运动。</td></tr>
+          <tr><td>3</td><td>基本合理，但受力方向或力度导致的运动细节有违和。</td></tr>
+          <tr><td>4</td><td>符合直觉的受力结果，偶有轻微不自然。</td></tr>
+          <tr><td>5</td><td>完全符合物理直觉，受力后的运动自然可信。</td></tr>
+        </table>
+
+        <strong>🎥 视频质量（Video Quality）</strong>
+        <table>
+          <tr><th>分数</th><th>评分标准</th></tr>
+          <tr><td>1</td><td>画面/时间质量差，严重伪影、抖动或几乎无动作。</td></tr>
+          <tr><td>2</td><td>明显噪点或时序不稳，运动弱或卡顿。</td></tr>
+          <tr><td>3</td><td>可接受的清晰度与流畅度，轻微瑕疵或动作较少。</td></tr>
+          <tr><td>4</td><td>画质和时序良好，动作连贯，仅少量缺陷。</td></tr>
+          <tr><td>5</td><td>画面清晰、时序流畅，动作丰富自然，无明显缺陷。</td></tr>
+        </table>
+      </div>
+
+      <button id="startBtn" class="btn">开始问卷</button>
+    </div>
+
+    <!-- 问卷页（每页一个视频+评分） -->
+    <div id="page" class="card" style="display:none;">
+      <div class="topbar">
+        <div class="counter" id="counter">第 1 / N 条</div>
+        <button id="backBtn" class="btn secondary">上一个</button>
+      </div>
+      <div id="criteria-desc" class="criteria-desc">
+        <strong>🧠 语义贴合度：</strong>
+        内容与运动是否符合提示，尤其是力的方向和作用位置。
+        <br>
+        <strong>🧭 物理常识性：</strong>
+        物体运动是否符合直觉的受力结果，轨迹/速度是否自然可信。
+        <br>
+        <strong>🎥 视频质量：</strong>
+        画面与时间轴的整体质量，清晰度、流畅度和动作丰富度（静态或近静态为较差）。
+      </div>
+      <div class="row">
+        <div class="video-wrap">
+          <video id="video" controls></video>
+        </div>
+        <div>
+          <h3 id="videoTitle">视频 1</h3>
+          <div id="promptBlock" class="prompt-block">
+            <h4>提示词</h4>
+            <div class="prompt-content">
+              <img id="promptImage" alt="提示词示意" />
+            </div>
+          </div>
+          <div id="formArea"></div>
+          <div id="errorBox" class="error" style="display:none;">请完成所有评分后再继续。</div>
+          <hr />
+          <div class="footer-actions">
+            <button id="nextBtn" class="btn">下一条</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 完成页 -->
+    <div id="done" class="card" style="display:none;">
+      <h2>评分完成！</h2>
+      <p class="muted">点击下方按钮下载 CSV。</p>
+      <button id="downloadBtn" class="btn">下载 CSV</button>
+    </div>
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
